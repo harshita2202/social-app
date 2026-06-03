@@ -1,8 +1,8 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const Post = require('../../../backend/models/Post');
-const authMiddleware = require('../../../backend/middleware/auth');
+const Post = require('../models/Post');
+const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
 
