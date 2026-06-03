@@ -28,7 +28,8 @@ export default function Signup() {
       login(res.data.user, res.data.token);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Signup failed');
+      console.log(err.response);
+setError(err.response?.data?.message || err.message);
     } finally {
       setLoading(false);
     }
