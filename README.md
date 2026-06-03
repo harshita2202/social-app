@@ -113,10 +113,5 @@ frontend/
 
 ---
 
-##  UI Reference
-Styled to match the TaskPlanet Social screen:
-- Blue primary color (`#2B6BE6`)
-- Dark navy bottom nav (`#1A3A8F`)
-- Card-based post feed with golden accents
-- Search bar, post creation box, tab filters
-- Like ❤️ and Comment 💬 actions per post
+## Website live on 
+https://social-app-henna-omega.vercel.app/
