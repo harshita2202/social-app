@@ -17,7 +17,7 @@ export default function Feed() {
     setLoading(true);
 
     try {
-      const res = await axios.get('/api/posts');
+      const res = await axios.get(`${API_URL}/api/posts`);
 
       // Remove invalid/broken posts
       const validPosts = res.data.filter(
