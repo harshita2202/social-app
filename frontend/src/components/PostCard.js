@@ -9,7 +9,8 @@ function timeAgo(dateStr) {
 
   if (!dateStr) return 'Just now';
 
-  const diff = (Date.now() - new Date(dateStr)) / 1000;
+  const diff =
+    (Date.now() - new Date(dateStr)) / 1000;
 
   if (diff < 60) return 'just now';
 
@@ -41,7 +42,8 @@ function getAvatarColor(name) {
   ];
 
   const idx =
-    (name?.charCodeAt(0) || 0) % colors.length;
+    (name?.charCodeAt(0) || 0) %
+    colors.length;
 
   return colors[idx];
 }
@@ -84,6 +86,7 @@ export default function PostCard({
       });
 
     } catch (err) {
+
       console.error(err);
     }
   };
@@ -137,9 +140,10 @@ export default function PostCard({
           <div
             className="post-avatar"
             style={{
-              background: getAvatarColor(
-                post.username
-              ),
+              background:
+                getAvatarColor(
+                  post.username
+                ),
             }}
           >
             {post.username
@@ -168,20 +172,60 @@ export default function PostCard({
         </div>
       )}
 
-      {/* Image */}
+      {/* Professional Image */}
       {post.image && (
-        <img
-          src={post.image}
-          alt="post"
-          className="post-image"
-        />
+
+        <div className="post-image-container">
+
+          <img
+            src={post.image}
+            alt="post"
+            className="post-image"
+          />
+
+          <div className="post-image-overlay">
+
+            <div className="post-image-icon">
+
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                strokeWidth="2"
+              >
+                <rect
+                  x="3"
+                  y="3"
+                  width="18"
+                  height="18"
+                  rx="2"
+                  ry="2"
+                />
+
+                <circle
+                  cx="8.5"
+                  cy="8.5"
+                  r="1.5"
+                />
+
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+
+            </div>
+
+          </div>
+
+        </div>
       )}
 
-      {/* Likes */}
+      {/* Likes List */}
       {post.likes?.length > 0 && (
+
         <div className="likes-list">
 
-          ❤️ Liked by{' '}
+          💗 Liked by{' '}
 
           {post.likes
             .slice(0, 3)
@@ -204,7 +248,8 @@ export default function PostCard({
           }`}
           onClick={handleLike}
         >
-          ❤️ {post.likes?.length || 0} Likes
+          {isLiked ? '💗' : '🤍'}{' '}
+          {post.likes?.length || 0} Likes
         </button>
 
         <button
@@ -213,7 +258,7 @@ export default function PostCard({
             setShowComments(!showComments)
           }
         >
-          💬{' '}
+          🗨️{' '}
           {post.comments?.length || 0}{' '}
           Comments
         </button>
@@ -257,9 +302,23 @@ export default function PostCard({
                 </div>
 
               </div>
+
             </div>
           ))}
 
+          {post.comments?.length === 0 && (
+            <div
+              style={{
+                padding: '10px 0',
+                color: '#9CA3AF',
+                fontSize: '13px',
+              }}
+            >
+              No comments yet.
+            </div>
+          )}
+
+          {/* Comment Input */}
           <form
             className="comment-input-row"
             onSubmit={handleComment}

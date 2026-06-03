@@ -1,31 +1,49 @@
 
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import EmojiPicker from 'emoji-picker-react';
 import { useAuth } from '../context/AuthContext';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-export default function CreatePost({ onPostCreated }) {
+export default function CreatePost({
+  onPostCreated,
+}) {
+
   const { token } = useAuth();
 
   const [text, setText] = useState('');
   const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+
+  const [imagePreview, setImagePreview] =
+    useState('');
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [error, setError] =
+    useState('');
+
+  const [showEmojiPicker, setShowEmojiPicker] =
+    useState(false);
 
   const fileRef = useRef();
 
   const handleImageSelect = (e) => {
+
     const file = e.target.files[0];
 
     if (!file) return;
 
     setImage(file);
-    setImagePreview(URL.createObjectURL(file));
+
+    setImagePreview(
+      URL.createObjectURL(file)
+    );
   };
 
   const removeImage = () => {
+
     setImage(null);
     setImagePreview('');
 
@@ -34,24 +52,38 @@ export default function CreatePost({ onPostCreated }) {
     }
   };
 
+  const handleEmojiClick = (emojiData) => {
+    setText(prev => prev + emojiData.emoji);
+  };
+
   const handleSubmit = async () => {
 
     if (!text.trim() && !image) {
-      setError('Please add text or image');
+
+      setError(
+        'Please add text or image.'
+      );
+
       return;
     }
 
-    setLoading(true);
     setError('');
+    setLoading(true);
 
     const formData = new FormData();
 
     if (text.trim()) {
-      formData.append('text', text.trim());
+      formData.append(
+        'text',
+        text.trim()
+      );
     }
 
     if (image) {
-      formData.append('image', image);
+      formData.append(
+        'image',
+        image
+      );
     }
 
     try {
@@ -62,20 +94,22 @@ export default function CreatePost({ onPostCreated }) {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
+            'Content-Type':
+              'multipart/form-data',
           },
         }
       );
 
-      onPostCreated(res.data);
-
       setText('');
       setImage(null);
       setImagePreview('');
+      setShowEmojiPicker(false);
 
       if (fileRef.current) {
         fileRef.current.value = '';
       }
+
+      onPostCreated(res.data);
 
     } catch (err) {
 
@@ -87,6 +121,7 @@ export default function CreatePost({ onPostCreated }) {
       );
 
     } finally {
+
       setLoading(false);
     }
   };
@@ -95,16 +130,15 @@ export default function CreatePost({ onPostCreated }) {
     <div className="create-post-section">
 
       <div className="create-post-header">
+
         <h3>Create Post</h3>
 
         <div className="post-tabs">
+
           <button className="post-tab active">
             All Posts
           </button>
 
-          <button className="post-tab">
-            Promotions
-          </button>
         </div>
       </div>
 
@@ -121,11 +155,14 @@ export default function CreatePost({ onPostCreated }) {
         className="create-post-textarea"
         placeholder="What's on your mind?"
         value={text}
-        onChange={(e) => setText(e.target.value)}
+        onChange={(e) =>
+          setText(e.target.value)
+        }
         rows={3}
       />
 
       {imagePreview && (
+
         <div className="post-image-preview">
 
           <img
@@ -147,11 +184,38 @@ export default function CreatePost({ onPostCreated }) {
 
         <div className="action-icons">
 
+          {/* Photo Upload */}
           <button
             className="action-icon-btn"
-            onClick={() => fileRef.current.click()}
+            onClick={() =>
+              fileRef.current.click()
+            }
           >
-            📷
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <rect
+                x="3"
+                y="3"
+                width="18"
+                height="18"
+                rx="2"
+                ry="2"
+              />
+
+              <circle
+                cx="8.5"
+                cy="8.5"
+                r="1.5"
+              />
+
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
           </button>
 
           <input
@@ -162,6 +226,103 @@ export default function CreatePost({ onPostCreated }) {
             onChange={handleImageSelect}
           />
 
+          {/* Emoji Button */}
+          <button
+            className="action-icon-btn"
+            onClick={() =>
+              setShowEmojiPicker(
+                !showEmojiPicker
+              )
+            }
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+              />
+
+              <path d="M8 13s1.5 2 4 2 4-2 4-2"/>
+
+              <line
+                x1="9"
+                y1="9"
+                x2="9.01"
+                y2="9"
+              />
+
+              <line
+                x1="15"
+                y1="9"
+                x2="15.01"
+                y2="9"
+              />
+            </svg>
+          </button>
+
+          {/* More */}
+          <button className="action-icon-btn">
+
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <line
+                x1="8"
+                y1="6"
+                x2="21"
+                y2="6"
+              />
+
+              <line
+                x1="8"
+                y1="12"
+                x2="21"
+                y2="12"
+              />
+
+              <line
+                x1="8"
+                y1="18"
+                x2="21"
+                y2="18"
+              />
+
+              <line
+                x1="3"
+                y1="6"
+                x2="3.01"
+                y2="6"
+              />
+
+              <line
+                x1="3"
+                y1="12"
+                x2="3.01"
+                y2="12"
+              />
+
+              <line
+                x1="3"
+                y1="18"
+                x2="3.01"
+                y2="18"
+              />
+            </svg>
+
+          </button>
+
         </div>
 
         <button
@@ -169,10 +330,26 @@ export default function CreatePost({ onPostCreated }) {
           onClick={handleSubmit}
           disabled={loading}
         >
-          {loading ? 'Posting...' : 'Post'}
+          {loading
+            ? 'Posting...'
+            : 'Post'}
         </button>
 
       </div>
+
+      {/* Emoji Picker */}
+      {showEmojiPicker && (
+
+        <div
+          style={{
+            marginTop: '12px',
+          }}
+        >
+          <EmojiPicker
+            onEmojiClick={handleEmojiClick}
+          />
+        </div>
+      )}
     </div>
   );
 }
