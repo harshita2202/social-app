@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.REACT_APP_API_URL;
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -18,7 +18,7 @@ export default function Login() {
     setLoading(true);
     try {
       const res = await axios.post(
-  `${API_URL}/api/auth/signup`,
+  `${API_URL}/api/auth/login`,
   form
 );
       login(res.data.user, res.data.token);
