@@ -36,6 +36,7 @@ export default function Feed() {
     useState('');
 
 
+
   // ================= FETCH POSTS =================
 
   const fetchPosts = async () => {
@@ -61,11 +62,14 @@ export default function Feed() {
   };
 
 
+
   useEffect(() => {
 
     fetchPosts();
 
   }, []);
+
+
 
 
   // ================= NEW POST =================
@@ -78,6 +82,8 @@ export default function Feed() {
       ...prev,
     ]);
   };
+
+
 
 
   // ================= UPDATE POST =================
@@ -96,6 +102,8 @@ export default function Feed() {
       )
     );
   };
+
+
 
 
   // ================= FILTER POSTS =================
@@ -161,88 +169,343 @@ export default function Feed() {
   };
 
 
+
+
   return (
 
-    <div className="feed-page">
+    <div>
 
-      <CreatePost
-        onPostCreated={
-          handlePostCreated
-        }
-      />
+      {/* HEADER */}
 
-      <div className="feed-tabs">
+      <div className="top-header">
 
-        {[
-          {
-            id: 'all',
-            label: 'All Posts',
-          },
+        <div className="header-logo">
+          Social
+        </div>
 
-          {
-            id: 'for-you',
-            label: 'For You',
-          },
+        <div className="header-right">
 
-          {
-            id: 'most-liked',
-            label: 'Most Liked',
-          },
+          <div className="header-points">
+            <span>⭐</span>
+            <span>50</span>
+          </div>
 
-          {
-            id: 'most-commented',
-            label:
-              'Most Commented',
-          },
+          <div className="header-avatar">
 
-        ].map(tab => (
+            {user?.username
+              ?.charAt(0)
+              .toUpperCase()}
 
-          <button
-            key={tab.id}
-            className={`feed-tab-btn ${
-              activeTab === tab.id
-                ? 'active'
-                : ''
-            }`}
-            onClick={() =>
-              setActiveTab(tab.id)
-            }
-          >
-            {tab.label}
-          </button>
+          </div>
 
-        ))}
+        </div>
+
       </div>
 
 
-      {/* POSTS */}
 
-      {loading ? (
 
-        <p>
-          Loading posts...
-        </p>
+      {/* SEARCH */}
 
-      ) : filteredPosts().length === 0 ? (
+      <div className="search-bar-wrapper">
 
-        <p>
-          No posts yet.
-        </p>
+        <div className="search-bar">
 
-      ) : (
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle
+              cx="11"
+              cy="11"
+              r="8"
+            />
 
-        filteredPosts().map(post => (
+            <line
+              x1="21"
+              y1="21"
+              x2="16.65"
+              y2="16.65"
+            />
+          </svg>
 
-          <PostCard
-            key={post._id}
-            post={post}
-            onUpdate={
-              handlePostUpdate
+          <input
+            type="text"
+            placeholder="Search users or posts..."
+            value={search}
+            onChange={(e) =>
+              setSearch(
+                e.target.value
+              )
             }
           />
 
-        ))
-      )}
+        </div>
+
+      </div>
+
+
+
+
+      <div className="app-layout">
+
+        {/* CREATE POST */}
+
+        <CreatePost
+          onPostCreated={
+            handlePostCreated
+          }
+        />
+
+
+
+
+        {/* FEED TABS */}
+
+        <div className="feed-tabs">
+
+          {[
+            {
+              id: 'all',
+              label: 'All Posts',
+            },
+
+            {
+              id: 'for-you',
+              label: 'For You',
+            },
+
+            {
+              id: 'most-liked',
+              label: 'Most Liked',
+            },
+
+            {
+              id: 'most-commented',
+              label:
+                'Most Commented',
+            },
+
+          ].map(tab => (
+
+            <button
+              key={tab.id}
+              className={`feed-tab-btn ${
+                activeTab === tab.id
+                  ? 'active'
+                  : ''
+              }`}
+              onClick={() =>
+                setActiveTab(tab.id)
+              }
+            >
+              {tab.label}
+            </button>
+
+          ))}
+
+        </div>
+
+
+
+
+        {/* POSTS */}
+
+        {loading ? (
+
+          <div className="loading-state">
+            Loading posts...
+          </div>
+
+        ) : filteredPosts().length === 0 ? (
+
+          <div className="empty-state">
+
+            <div
+              style={{
+                fontSize: 48,
+              }}
+            >
+              📭
+            </div>
+
+            <p>No posts yet.</p>
+
+          </div>
+
+        ) : (
+
+          filteredPosts().map(post => (
+
+            <PostCard
+              key={post._id}
+              post={post}
+              onUpdate={
+                handlePostUpdate
+              }
+            />
+
+          ))
+        )}
+
+      </div>
+
+
+
+
+      {/* BOTTOM NAVIGATION */}
+
+      <nav className="bottom-nav">
+
+        <a href="/" className="nav-item">
+
+          <div className="nav-icon">
+
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M9 11l3 3L22 4"/>
+
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+
+          </div>
+
+          <span className="nav-label">
+            Tasks
+          </span>
+
+        </a>
+
+
+
+
+        <a
+          href="/"
+          className="nav-item active"
+        >
+
+          <div className="nav-social-icon">
+
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="2"
+            >
+              <circle
+                cx="18"
+                cy="5"
+                r="3"
+              />
+
+              <circle
+                cx="6"
+                cy="12"
+                r="3"
+              />
+
+              <circle
+                cx="18"
+                cy="19"
+                r="3"
+              />
+
+              <line
+                x1="8.59"
+                y1="13.51"
+                x2="15.42"
+                y2="17.49"
+              />
+
+              <line
+                x1="15.41"
+                y1="6.51"
+                x2="8.59"
+                y2="10.49"
+              />
+            </svg>
+
+          </div>
+
+          <span className="nav-label active">
+            Social
+          </span>
+
+        </a>
+
+
+
+
+        <a href="/" className="nav-item">
+
+          <div className="nav-icon">
+
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+
+          </div>
+
+          <span className="nav-label">
+            Leader Board
+          </span>
+
+        </a>
+
+
+
+
+<button
+  className="logout-btn"
+  onClick={logout}
+>
+
+  <div className="nav-icon">
+
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+
+      <polyline points="16 17 21 12 16 7"/>
+
+      <line x1="21" y1="12" x2="9" y2="12"/>
+    </svg>
+
+  </div>
+
+  <span className="nav-label">
+    Logout
+  </span>
+
+</button>
+
+      </nav>
+
     </div>
   );
 }
