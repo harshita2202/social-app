@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export default function Signup() {
   const [form, setForm] = useState({ username: '', email: '', password: '' });
   const [error, setError] = useState('');
@@ -19,7 +21,10 @@ export default function Signup() {
     }
     setLoading(true);
     try {
-      const res = await axios.post('/api/auth/signup', form);
+    const res = await axios.post(
+  `${API_URL}/api/auth/signup`,
+  form
+);
       login(res.data.user, res.data.token);
       navigate('/');
     } catch (err) {
